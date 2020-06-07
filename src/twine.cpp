@@ -27,10 +27,12 @@
 #ifdef TWINE_BUILD_WITH_XENOMAI
     #pragma GCC diagnostic ignored "-Wunused-parameter"
     #include <cobalt/stdio.h>
+    #include <cobalt/time.h>  // Added this so I can use nanosleep cobalt function
     #pragma GCC diagnostic pop
 #else
     #include <cstdio>
     #include <cstdarg>
+    #include <time.h>  // Added this so I can use standard nanosleep function if xenomai is not set
     #define rt_vfprintf vfprintf
 #endif
 
@@ -87,13 +89,18 @@ std::chrono::nanoseconds current_rt_time()
     }
     else
     {
-        return std::chrono::steady_clock::now().time_since_epoch();
+        return std::chrono::high_resolution_clock::now().time_since_epoch();
     }
 }
 
 void set_flush_denormals_to_zero()
 {
     denormals_intrinsic();
+}
+
+void nanosleep(const struct timespec *time)
+{
+    nanosleep(time, nullptr);
 }
 
 

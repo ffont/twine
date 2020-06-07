@@ -54,6 +54,9 @@ enum class WorkerPoolStatus
  */
 std::chrono::nanoseconds current_rt_time();
 
+void nanosleep(const struct timespec *time);
+
+
 class WorkerPool
 {
 public:
